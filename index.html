@@ -12,15 +12,15 @@
         .active { display:flex; animation: fadeIn 1s forwards; }
 
         /* Stage 1: The Mirror Room */
-        #stage1 { background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1594931087401-447a1be7095c?auto=format&fit=crop&q=80&w=1000'); background-size: cover; }
+        #stage1 { background: radial-gradient(circle, #222, #000); }
         
-        .mirror-container { position: relative; width: 300px; height: 450px; border: 10px solid #444; border-radius: 15px; overflow: hidden; box-shadow: 0 0 50px rgba(0,0,0,0.5); }
-        .mirror-content { position: absolute; width: 100%; height: 100%; background: #fff5f5; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; text-align: center; color: #333; }
+        .mirror-container { position: relative; width: 300px; height: 450px; border: 10px solid #444; border-radius: 15px; overflow: hidden; box-shadow: 0 0 50px rgba(0,0,0,0.8); }
+        .mirror-content { position: absolute; width: 100%; height: 100%; background: #fff5f5; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; text-align: center; color: #333; z-index: 1; }
         
         /* The Fog Layer */
-        #canvas { position: absolute; top: 0; left: 0; z-index: 10; cursor: crosshair; touch-action: none; filter: blur(2px); }
+        #canvas { position: absolute; top: 0; left: 0; z-index: 5; cursor: crosshair; touch-action: none; transition: opacity 1s; }
 
-        .btn { background: var(--rose); color: white; border: none; padding: 12px 25px; border-radius: 25px; font-weight: bold; cursor: pointer; margin-top: 15px; }
+        .btn { background: var(--rose); color: white; border: none; padding: 12px 25px; border-radius: 25px; font-weight: bold; cursor: pointer; margin-top: 15px; z-index: 10; position: relative; }
         .special-name { color: var(--rose); font-family: 'Cursive', sans-serif; font-size: 1.6rem; }
 
         @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
@@ -31,19 +31,19 @@
     <audio id="bgMusic" loop><source src="https://www.bensound.com/bensound-music/bensound-love.mp3" type="audio/mpeg"></audio>
 
     <div id="stage1" class="stage active">
-        <h2 style="color:white; text-shadow: 2px 2px 5px #000;">10 Days to Go... ✨</h2>
-        <p style="color:#ccc;">Aina thoda dhundla hai... Isse saaf kariye!</p>
+        <h2 style="color:var(--gold); font-style: italic; margin-bottom: 10px;">Someone left a message on the mirror... 🪞</h2>
+        <p style="color:#ccc; margin-bottom: 20px;">It's for you! Saaf kar ke dekhiye, <b>Ashu Janu</b></p>
         
         <div class="mirror-container">
             <div class="mirror-content">
-                <span style="font-size: 40px;">🪞</span>
+                <span style="font-size: 40px;">❤️</span>
                 <h3 class="special-name">Ashu Janu</h3>
                 <p style="font-size: 0.9rem; line-height: 1.4;">"Is aine mein jo nazar aa raha hai, wahi meri poori duniya hai..."</p>
                 <button class="btn" onclick="showLetter()">Khat Parhiye ❤️</button>
             </div>
             <canvas id="canvas"></canvas>
         </div>
-        <p style="color:rgba(255,255,255,0.4); margin-top:15px; font-size: 0.8rem;">(Ungli se screen saaf karein)</p>
+        <p style="color:rgba(255,255,255,0.4); margin-top:15px; font-size: 0.8rem;">(Ungli se aina saaf karein)</p>
     </div>
 
     <div id="stage2" class="stage" style="background:#fff5f5; color:#333; overflow-y:auto; padding: 40px 20px;">
@@ -62,7 +62,7 @@
 
                 <p>10 din baad tumhara din hai, par jashn meri zindagi ka hai, kyunke tum meri zindagi ho.</p>
 
-                <p><b>Advance Happy Birthday Meri Pyari Ashu Janu!</b> 🎂💖</p>
+                <p style="text-align: center; font-weight: bold; color: var(--rose);">Advance Happy Birthday Meri Pyari Ashu Janu! 🎂💖</p>
             </div>
             <center><button class="btn" onclick="location.reload()">Wapis Dekhein ✨</button></center>
         </div>
@@ -73,18 +73,17 @@
         const ctx = canvas.getContext('2d');
         let painting = false;
 
-        // Draw Fog
         function setupCanvas() {
             canvas.width = 300;
             canvas.height = 450;
-            ctx.fillStyle = "#cbd5e0"; // Foggy color
+            ctx.fillStyle = "#cbd5e0"; // Fog color
             ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.globalCompositeOperation = 'destination-out'; // Erase mode
+            ctx.globalCompositeOperation = 'destination-out';
         }
 
         function start(e) { 
             painting = true; 
-            document.getElementById('bgMusic').play();
+            if(document.getElementById('bgMusic').paused) document.getElementById('bgMusic').play();
             draw(e); 
         }
         function end() { painting = false; ctx.beginPath(); }
@@ -92,10 +91,10 @@
         function draw(e) {
             if(!painting) return;
             const rect = canvas.getBoundingClientRect();
-            const x = (e.clientX || e.touches[0].clientX) - rect.left;
-            const y = (e.clientY || e.touches[0].clientY) - rect.top;
+            const x = (e.clientX || (e.touches && e.touches[0].clientX)) - rect.left;
+            const y = (e.clientY || (e.touches && e.touches[0].clientY)) - rect.top;
 
-            ctx.lineWidth = 45;
+            ctx.lineWidth = 50;
             ctx.lineCap = 'round';
             ctx.lineTo(x, y);
             ctx.stroke();
@@ -105,12 +104,13 @@
 
         canvas.addEventListener('mousedown', start);
         canvas.addEventListener('mousemove', draw);
-        canvas.addEventListener('mouseup', end);
+        window.addEventListener('mouseup', end);
         canvas.addEventListener('touchstart', (e) => { e.preventDefault(); start(e); });
         canvas.addEventListener('touchmove', (e) => { e.preventDefault(); draw(e); });
         canvas.addEventListener('touchend', end);
 
         function showLetter() {
+            // Letter pe jaane ke liye stage switch
             document.getElementById('stage1').style.display = 'none';
             document.getElementById('stage2').style.display = 'flex';
             document.getElementById('stage2').classList.add('active');
