@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>10 Days to Go - Ashu Janu</title>
+    <style>
+        :root { --rose: #ff4d6d; --gold: #d4af37; }
+        body, html { margin:0; padding:0; overflow:hidden; font-family:'Poppins', serif; background:#1a1a1a; }
+
+        .stage { display:none; width:100vw; height:100vh; justify-content:center; align-items:center; flex-direction:column; position:absolute; }
+        .active { display:flex; animation: fadeIn 1s forwards; }
+
+        /* Stage 1: The Mirror Room */
+        #stage1 { background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1594931087401-447a1be7095c?auto=format&fit=crop&q=80&w=1000'); background-size: cover; }
+        
+        .mirror-container { position: relative; width: 300px; height: 450px; border: 10px solid #444; border-radius: 15px; overflow: hidden; box-shadow: 0 0 50px rgba(0,0,0,0.5); }
+        .mirror-content { position: absolute; width: 100%; height: 100%; background: #fff5f5; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; text-align: center; color: #333; }
+        
+        /* The Fog Layer */
+        #canvas { position: absolute; top: 0; left: 0; z-index: 10; cursor: crosshair; touch-action: none; filter: blur(2px); }
+
+        .btn { background: var(--rose); color: white; border: none; padding: 12px 25px; border-radius: 25px; font-weight: bold; cursor: pointer; margin-top: 15px; }
+        .special-name { color: var(--rose); font-family: 'Cursive', sans-serif; font-size: 1.6rem; }
+
+        @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+    </style>
+</head>
+<body>
+
+    <audio id="bgMusic" loop><source src="https://www.bensound.com/bensound-music/bensound-love.mp3" type="audio/mpeg"></audio>
+
+    <div id="stage1" class="stage active">
+        <h2 style="color:white; text-shadow: 2px 2px 5px #000;">10 Days to Go... ✨</h2>
+        <p style="color:#ccc;">Aina thoda dhundla hai... Isse saaf kariye!</p>
+        
+        <div class="mirror-container">
+            <div class="mirror-content">
+                <span style="font-size: 40px;">🪞</span>
+                <h3 class="special-name">Ashu Janu</h3>
+                <p style="font-size: 0.9rem; line-height: 1.4;">"Is aine mein jo nazar aa raha hai, wahi meri poori duniya hai..."</p>
+                <button class="btn" onclick="showLetter()">Khat Parhiye ❤️</button>
+            </div>
+            <canvas id="canvas"></canvas>
+        </div>
+        <p style="color:rgba(255,255,255,0.4); margin-top:15px; font-size: 0.8rem;">(Ungli se screen saaf karein)</p>
+    </div>
+
+    <div id="stage2" class="stage" style="background:#fff5f5; color:#333; overflow-y:auto; padding: 40px 20px;">
+        <div style="max-width: 500px; text-align: left;">
+            <h2 style="color:var(--rose); text-align: center;">Meri Rahat-e-Jaan <br>Ashu Janu ❤️</h2>
+            
+            <div id="letterBody">
+                <p><b>10 Din Baqi Hain...</b> Aur har guzarta lamha meri bechaini barha raha hai.</p>
+                <p>Tumhe pata hai? Jab main aine mein dekhta hoon, to mujhe sirf tum nazar aati ho. Kyunke tum mere dil ka aks ho.</p>
+                
+                <p><i>"Tumhare hone se main mukammal ho jata hoon… aur jab tum door hoti ho, to jaise kuch adhoora reh jata hai"</i> 💔</p>
+                
+                <p>Meri pyari <span class="special-name">Ashu</span>, log kehte hain mohabbat ek baar hoti hai, par mujhe to tumse har subah phir se mohabbat ho jati hai.</p>
+                
+                <p>Tum meri wo muskurahat ho jo mere chehre par tab aati hai jab main akela hota hoon aur tumhare bare mein soch raha hota hoon. 🫀</p>
+
+                <p>10 din baad tumhara din hai, par jashn meri zindagi ka hai, kyunke tum meri zindagi ho.</p>
+
+                <p><b>Advance Happy Birthday Meri Pyari Ashu Janu!</b> 🎂💖</p>
+            </div>
+            <center><button class="btn" onclick="location.reload()">Wapis Dekhein ✨</button></center>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        let painting = false;
+
+        // Draw Fog
+        function setupCanvas() {
+            canvas.width = 300;
+            canvas.height = 450;
+            ctx.fillStyle = "#cbd5e0"; // Foggy color
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.globalCompositeOperation = 'destination-out'; // Erase mode
+        }
+
+        function start(e) { 
+            painting = true; 
+            document.getElementById('bgMusic').play();
+            draw(e); 
+        }
+        function end() { painting = false; ctx.beginPath(); }
+        
+        function draw(e) {
+            if(!painting) return;
+            const rect = canvas.getBoundingClientRect();
+            const x = (e.clientX || e.touches[0].clientX) - rect.left;
+            const y = (e.clientY || e.touches[0].clientY) - rect.top;
+
+            ctx.lineWidth = 45;
+            ctx.lineCap = 'round';
+            ctx.lineTo(x, y);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+        }
+
+        canvas.addEventListener('mousedown', start);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', end);
+        canvas.addEventListener('touchstart', (e) => { e.preventDefault(); start(e); });
+        canvas.addEventListener('touchmove', (e) => { e.preventDefault(); draw(e); });
+        canvas.addEventListener('touchend', end);
+
+        function showLetter() {
+            document.getElementById('stage1').style.display = 'none';
+            document.getElementById('stage2').style.display = 'flex';
+            document.getElementById('stage2').classList.add('active');
+        }
+
+        setupCanvas();
+    </script>
+</body>
+</html>
