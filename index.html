@@ -2,25 +2,34 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>10 Days to Go - Ashu Janu</title>
     <style>
         :root { --rose: #ff4d6d; --gold: #d4af37; }
-        body, html { margin:0; padding:0; overflow:hidden; font-family:'Poppins', serif; background:#1a1a1a; }
+        body, html { margin:0; padding:0; overflow:hidden; font-family:'Poppins', serif; background:#1a1a1a; touch-action: none; }
 
         .stage { display:none; width:100vw; height:100vh; justify-content:center; align-items:center; flex-direction:column; position:absolute; }
-        .active { display:flex; animation: fadeIn 1s forwards; }
+        .active { display:flex; animation: fadeIn 0.5s forwards; }
 
-        /* Stage 1: The Mirror Room */
         #stage1 { background: radial-gradient(circle, #222, #000); }
         
         .mirror-container { position: relative; width: 300px; height: 450px; border: 10px solid #444; border-radius: 15px; overflow: hidden; box-shadow: 0 0 50px rgba(0,0,0,0.8); }
-        .mirror-content { position: absolute; width: 100%; height: 100%; background: #fff5f5; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; text-align: center; color: #333; z-index: 1; }
         
-        /* The Fog Layer */
-        #canvas { position: absolute; top: 0; left: 0; z-index: 5; cursor: crosshair; touch-action: none; transition: opacity 1s; }
+        .mirror-content { 
+            position: absolute; width: 100%; height: 100%; background: #fff5f5; 
+            display: flex; flex-direction: column; justify-content: center; 
+            align-items: center; padding: 20px; text-align: center; color: #333; z-index: 1; 
+        }
+        
+        /* The Fix: pointer-events handle karega click issues */
+        #canvas { position: absolute; top: 0; left: 0; z-index: 5; cursor: crosshair; touch-action: none; }
 
-        .btn { background: var(--rose); color: white; border: none; padding: 12px 25px; border-radius: 25px; font-weight: bold; cursor: pointer; margin-top: 15px; z-index: 10; position: relative; }
+        .btn { 
+            background: var(--rose); color: white; border: none; 
+            padding: 15px 30px; border-radius: 30px; font-weight: bold; 
+            cursor: pointer; margin-top: 15px; z-index: 20; position: relative;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
         .special-name { color: var(--rose); font-family: 'Cursive', sans-serif; font-size: 1.6rem; }
 
         @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
@@ -31,19 +40,19 @@
     <audio id="bgMusic" loop><source src="https://www.bensound.com/bensound-music/bensound-love.mp3" type="audio/mpeg"></audio>
 
     <div id="stage1" class="stage active">
-        <h2 style="color:var(--gold); font-style: italic; margin-bottom: 10px;">Someone left a message on the mirror... 🪞</h2>
-        <p style="color:#ccc; margin-bottom: 20px;">It's for you! Saaf kar ke dekhiye, <b>Ashu Janu</b></p>
+        <h2 style="color:var(--gold); font-style: italic; margin-bottom: 10px;">Someone left a message... 🪞</h2>
+        <p style="color:#ccc; margin-bottom: 20px;">It's for you, <b>Ashu Janu</b>!</p>
         
         <div class="mirror-container">
             <div class="mirror-content">
                 <span style="font-size: 40px;">❤️</span>
                 <h3 class="special-name">Ashu Janu</h3>
                 <p style="font-size: 0.9rem; line-height: 1.4;">"Is aine mein jo nazar aa raha hai, wahi meri poori duniya hai..."</p>
-                <button class="btn" onclick="showLetter()">Khat Parhiye ❤️</button>
+                <button class="btn" onclick="showLetter(event)">Khat Parhiye ❤️</button>
             </div>
             <canvas id="canvas"></canvas>
         </div>
-        <p style="color:rgba(255,255,255,0.4); margin-top:15px; font-size: 0.8rem;">(Ungli se aina saaf karein)</p>
+        <p style="color:rgba(255,255,255,0.4); margin-top:15px; font-size: 0.8rem;">(Aina saaf karke button dabayein)</p>
     </div>
 
     <div id="stage2" class="stage" style="background:#fff5f5; color:#333; overflow-y:auto; padding: 40px 20px;">
@@ -53,18 +62,13 @@
             <div id="letterBody">
                 <p><b>10 Din Baqi Hain...</b> Aur har guzarta lamha meri bechaini barha raha hai.</p>
                 <p>Tumhe pata hai? Jab main aine mein dekhta hoon, to mujhe sirf tum nazar aati ho. Kyunke tum mere dil ka aks ho.</p>
-                
                 <p><i>"Tumhare hone se main mukammal ho jata hoon… aur jab tum door hoti ho, to jaise kuch adhoora reh jata hai"</i> 💔</p>
-                
                 <p>Meri pyari <span class="special-name">Ashu</span>, log kehte hain mohabbat ek baar hoti hai, par mujhe to tumse har subah phir se mohabbat ho jati hai.</p>
-                
                 <p>Tum meri wo muskurahat ho jo mere chehre par tab aati hai jab main akela hota hoon aur tumhare bare mein soch raha hota hoon. 🫀</p>
-
                 <p>10 din baad tumhara din hai, par jashn meri zindagi ka hai, kyunke tum meri zindagi ho.</p>
-
                 <p style="text-align: center; font-weight: bold; color: var(--rose);">Advance Happy Birthday Meri Pyari Ashu Janu! 🎂💖</p>
             </div>
-            <center><button class="btn" onclick="location.reload()">Wapis Dekhein ✨</button></center>
+            <center><button class="btn" onclick="location.reload()">Reset Mirror ✨</button></center>
         </div>
     </div>
 
@@ -76,7 +80,7 @@
         function setupCanvas() {
             canvas.width = 300;
             canvas.height = 450;
-            ctx.fillStyle = "#cbd5e0"; // Fog color
+            ctx.fillStyle = "#cbd5e0"; 
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             ctx.globalCompositeOperation = 'destination-out';
         }
@@ -86,15 +90,18 @@
             if(document.getElementById('bgMusic').paused) document.getElementById('bgMusic').play();
             draw(e); 
         }
-        function end() { painting = false; ctx.beginPath(); }
-        
+
         function draw(e) {
             if(!painting) return;
+            // Jab wo saaf karna shuru karein, hum button ko clickable bana denge
+            canvas.style.pointerEvents = 'none'; 
+            setTimeout(() => { canvas.style.pointerEvents = 'auto'; }, 100);
+
             const rect = canvas.getBoundingClientRect();
             const x = (e.clientX || (e.touches && e.touches[0].clientX)) - rect.left;
             const y = (e.clientY || (e.touches && e.touches[0].clientY)) - rect.top;
 
-            ctx.lineWidth = 50;
+            ctx.lineWidth = 55;
             ctx.lineCap = 'round';
             ctx.lineTo(x, y);
             ctx.stroke();
@@ -104,13 +111,13 @@
 
         canvas.addEventListener('mousedown', start);
         canvas.addEventListener('mousemove', draw);
-        window.addEventListener('mouseup', end);
-        canvas.addEventListener('touchstart', (e) => { e.preventDefault(); start(e); });
-        canvas.addEventListener('touchmove', (e) => { e.preventDefault(); draw(e); });
-        canvas.addEventListener('touchend', end);
+        window.addEventListener('mouseup', () => painting = false);
+        canvas.addEventListener('touchstart', (e) => { start(e); });
+        canvas.addEventListener('touchmove', (e) => { draw(e); });
+        canvas.addEventListener('touchend', () => painting = false);
 
-        function showLetter() {
-            // Letter pe jaane ke liye stage switch
+        function showLetter(e) {
+            e.stopPropagation(); // Click ko mazeed phailne se rokega
             document.getElementById('stage1').style.display = 'none';
             document.getElementById('stage2').style.display = 'flex';
             document.getElementById('stage2').classList.add('active');
